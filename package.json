@@ -1,0 +1,14 @@
+{
+  "name": "design-lens",
+  "version": "1.0.0",
+  "description": "perf lab",
+  "main": "/server/index.js",
+  "scripts": {
+    "dev": "nodemon server/app.js"
+  },
+  "author": "Moshe Bienenfeld, Eliazer Braun",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.1"
+  }
+}
