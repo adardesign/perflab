@@ -1,0 +1,17 @@
+<%
+
+format = {
+	elipses: function(str, max, elips) {
+		// not to confuse with adrma.trunc.js
+		if (!str) {
+			return "";
+		}
+		elips = elips === false ? "" : "...";
+		var length = str.length;
+		if (length > max) {
+			return str.substr(0, length + max - length) + elips;
+		}
+		return str;
+	}
+}
+%>
