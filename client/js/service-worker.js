@@ -98,7 +98,7 @@ self.addEventListener('message', function(event) {
           // call to controller.postMessage(). Therefore, event.ports[0].postMessage() will trigger the onmessage
           // handler from the controlled page.
           // It's up to you how to structure the messages that you send back; this is just one example.
-          sendMessageToAllClients(urls ? urls : "fail fetching urls");
+          sendMessageToAllClients(urls ? urls : "fail fetching");
         });
 
       // This command adds a new request/response pair to the cache.
