@@ -31,12 +31,12 @@ app.get(["/", "/:page"], (req, res) => {
       if (!error && response.statusCode === 200) {
           responseJson = JSON.parse(body)
           res.render('../views/index.ejs', {
-          pageType:"remote",
+          pageType:"cache version via firebase:",
           cacheVersion:responseJson.cacheVersion
         });
       } else {
           res.render('../views/index.ejs', {
-          pageType:"",
+          pageType:"cache version via local:",
           cacheVersion:cacheVersion
         });
       }
