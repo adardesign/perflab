@@ -2,6 +2,7 @@ var cacheVersion = "3";
 var express = require('express');
 var app = express();
 var fs = require('fs') 
+var request = require('request');
 
 app.set('view engine', 'ejs')
 
@@ -25,10 +26,21 @@ app.use('/client', express.static(__dirname + '/../client/'));
 app.use('/service-worker.js', express.static(__dirname+ '/../client/js/service-worker.js'));
 
 app.get(["/", "/:page"], (req, res) => {
-  res.render('../views/index.ejs', {
-      pageType:"",
-      cacheVersion:cacheVersion
-  });
+  const url = 'https://perflab-163717.firebaseio.com/.json';
+    request(url, (error, response, body)=> {
+      if (!error && response.statusCode === 200) {
+          responseJson = JSON.parse(body)
+          res.render('../views/index.ejs', {
+          pageType:"remote",
+          cacheVersion:responseJson.cacheVersion
+        });
+      } else {
+          res.render('../views/index.ejs', {
+          pageType:"",
+          cacheVersion:cacheVersion
+        });
+      }
+    });
 });
 
 
