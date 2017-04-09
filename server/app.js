@@ -32,12 +32,14 @@ app.get(["/", "/:page"], (req, res) => {
           responseJson = JSON.parse(body)
           res.render('../views/index.ejs', {
           pageType:"cache version via firebase:",
-          cacheVersion:responseJson.cacheVersion
+          cacheVersion:responseJson.cacheVersion,
+          currentUrl:req.url
         });
       } else {
           res.render('../views/index.ejs', {
           pageType:"cache version via local:",
-          cacheVersion:cacheVersion
+          cacheVersion:cacheVersion,
+          currentUrl:req.url
         });
       }
     });

@@ -1,3 +1,4 @@
+//TEST
 fetch('https://perflab-163717.firebaseio.com/.json').then(function(response) { 
 	// Convert to JSON
 	return response.json();
@@ -35,7 +36,11 @@ fetch('https://perflab-163717.firebaseio.com/.json').then(function(response) {
     		switch (event.data.dataType) {
     			case "keys":
     				var cacheList = document.getElementById("cache-list");
-    					cacheList.innerHTML = event.data.urls
+    				console.log(event.data.urls);
+    				console.log(event.data.urls.join("<li>"));
+    				if(event.data.urls && event.data.urls.length){	
+    					cacheList.innerHTML = "<ul><li>"+event.data.urls.join("</li><li>")+"</ul>";
+    				}
     				break;
     			default:
     				// statements_def

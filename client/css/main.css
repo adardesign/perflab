@@ -1,3 +1,28 @@
 body{
 	background: #eee;
 }
+
+header{
+	background: #333;
+	padding:20px;
+	font-size: 20px;
+	margin:0 0 20px;
+	height: 20px;
+	border-bottom: 2px solid #bbb;
+	text-align: center;
+	color:#fff;
+}
+
+.pageContent{
+	height: calc(100vh - 170px);
+}
+footer{
+	background: #bbb;
+	padding:20px;
+	font-size: 20px;
+	margin:20px 0 0;
+	height: 20px;
+	border-top: 2px solid;
+	text-align: center;
+	color:#aaa;
+}

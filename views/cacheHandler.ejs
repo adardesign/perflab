@@ -1,0 +1,27 @@
+<div class="cache-handler">
+<%-pageType%>
+<%-cacheVersion%>
+<button id="get-list-cache">list cached pages</button>
+<div id="cache-list"></div>
+<form id="cache-delete">
+	<input type="text" value="<%-currentUrl%>" id="currentUrl">
+	<button type="submit">Delete</button>
+</form>
+
+<script>
+	var listCache = document.getElementById("get-list-cache");
+	listCache.addEventListener("click", function(){
+		navigator.serviceWorker.controller.postMessage({command: 'keys'});
+
+	}, false);
+
+	var cacheDelete = document.getElementById("cache-delete");
+	cacheDelete.addEventListener("submit", function(e){
+		e.preventDefault();
+			var currentUrl = document.getElementById("currentUrl");
+			var currentUrlVal = currentUrl.value;
+			navigator.serviceWorker.controller.postMessage({command: 'delete', url:currentUrlVal});
+	}, false);
+
+</script>
+</div>
