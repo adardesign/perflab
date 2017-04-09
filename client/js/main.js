@@ -4,11 +4,13 @@ fetch('https://perflab-163717.firebaseio.com/.json').then(function(response) {
 }).then(function(response) {
 	// compare the cacheVersion with the getAsyncData one..
 	if(response.cacheVersion === pageInfo.cacheVersion){
-		console.log("cache-stale")
+		console.log("cache-fresh")
 		navigator.serviceWorker.controller.postMessage({command: 'keys'});
 	}else{
+		console.log("cache-fresh")
 		var url = location.origin + location.pathname + location.search;
 		navigator.serviceWorker.controller.postMessage({command: 'delete', url:location.origin + location.pathname + location.search});
+		document.querySelectorAll("header")[0].innerHTML = "<h1>page is stale refreshing...</h1>";
 	}
 }).catch( (err) => console.log);
 
@@ -29,5 +31,15 @@ fetch('https://perflab-163717.firebaseio.com/.json').then(function(response) {
 
 
 	navigator.serviceWorker.addEventListener('message', function(event) {
-    		console.log(event.data);
+    	if(event.data.dataType){
+    		switch (event.data.dataType) {
+    			case "keys":
+    				var cacheList = document.getElementById("cache-list");
+    					cacheList.innerHTML = event.data.urls
+    				break;
+    			default:
+    				// statements_def
+    				break;
+    		}
+    	}
   	});

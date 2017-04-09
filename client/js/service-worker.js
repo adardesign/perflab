@@ -98,7 +98,7 @@ self.addEventListener('message', function(event) {
           // call to controller.postMessage(). Therefore, event.ports[0].postMessage() will trigger the onmessage
           // handler from the controlled page.
           // It's up to you how to structure the messages that you send back; this is just one example.
-          sendMessageToAllClients(urls ? urls : "fail fetching");
+          sendMessageToAllClients({dataType:"keys", urls: urls? urls : "fail fetching"});
         });
 
       // This command adds a new request/response pair to the cache.
@@ -107,18 +107,20 @@ self.addEventListener('message', function(event) {
         // by the outer .catch().
         // Hardcode {mode: 'no-cors} since the default for new Requests constructed from strings is to require
         // CORS, and we don't have any way of knowing whether an arbitrary URL that a user entered supports CORS.
-        var request = new Request(event.data.url, {mode: 'no-cors'});
+        var url = event.data.url;
+        var request = new Request(url, {mode: 'no-cors'});
         return fetch(request).then(function(response) {
-          return cache.put(event.data.url, response);
+          return cache.put(url, response);
         }).then(function() {
-          sendMessageToAllClients(success ? "success" : "fail");
+          sendMessageToAllClients({dataType:"add", url:url, status: "success"});
         });
 
       // This command removes a request/response pair from the cache (assuming it exists).
       case 'delete':
+        var url = event.data.url;
         sendMessageToAllClients("attempting delete cache");
-        return cache.delete(event.data.url).then(function(success) {
-            sendMessageToAllClients(success ? "success delete cache" : "fail delete cache");
+        return cache.delete(url).then(function(success) {
+            sendMessageToAllClients({dataType:"add", url:url, status: success ? "success" : "fail"});
         });
       default:
         // This will be handled by the outer .catch().
@@ -158,7 +160,7 @@ function sendMessageToSingleClient(client, msg){
             }
         };
 
-        client.postMessage("SW Says: '"+msg+"'", [msg_chan.port2]);
+        client.postMessage(msg, [msg_chan.port2]);
     });
 }
 
