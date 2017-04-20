@@ -10,3 +10,18 @@ Results: There are some implication (http://www.webpagetest.org/result/170405_8B
 - [x] when a service worker is installed it applies to all pages, even those that doesn't have the service worker registration 
 - [ ] Abilty to invalidate exsiting page
 - [ ] Upadate current page with message.
+- [ ] 
+
+SW is downloaded - compared according to the expire headers is set, fortunately the browser expires it at least once in 24 hours.
+
+
+
+I am trying to setup a cache system where if a page has been updated by the server we can then send a message to the sw and delete some caches..
+
+But even as I can confirm that the cache is deleted, still the page will use the previous cached version instead of going to the server.
+
+I setup a test app where this can clearly be seen. 
+https://perflab.herokuapp.com/
+
+step 1
+

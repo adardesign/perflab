@@ -11,8 +11,8 @@ app.set('port', (process.env.PORT || 5000));
 // caching..
 app.use(function (req, res, next) {
     //if (req.url.match(/\.(css|js|img|font|html)\/.+/)) {
-        res.setHeader('Cache-Control', 'public, max-age=3600')
-        res.setHeader('test-eb', 'OK')
+        // res.setHeader('Cache-Control', 'public, max-age=3600')
+        // res.setHeader('test-eb', 'OK')
     //}
     next();
 });

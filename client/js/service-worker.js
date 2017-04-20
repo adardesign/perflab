@@ -28,7 +28,7 @@ const PRECACHE_URLS = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(PRECACHE)
-      .then(cache => cache.addAll(PRECACHE_URLS))
+      //.then(cache => cache.addAll(PRECACHE_URLS))
       .then(self.skipWaiting())
   );
 });
@@ -53,30 +53,52 @@ self.addEventListener('activate', event => {
 // The fetch handler serves responses for same-origin resources from a cache.
 // If no response is found, it populates the runtime cache with the response
 // from the network before returning it to the page.
-self.addEventListener('fetch', event => {
-  // Skip cross-origin requests, like those for Google Analytics.
-  if (event.request.url.startsWith(self.location.origin)) {
-    if(event.request.url.indexOf("getAsyncData") !== -1) return;
-    event.respondWith(
-      caches.match(event.request).then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
+// self.addEventListener('fetch', event => {
+//   // Skip cross-origin requests, like those for Google Analytics.
+//   if (event.request.url.startsWith(self.location.origin)) {
+//     if(event.request.url.indexOf("getAsyncData") !== -1) return;
+//     event.respondWith(
+//       caches.match(event.request).then(cachedResponse => {
+//         if (cachedResponse) {
+//           return cachedResponse;
+//         }
+// 
+//         return caches.open(RUNTIME).then(cache => {
+//           return fetch(event.request).then(response => {
+//             // Put a copy of the response in the runtime cache.
+//             return cache.put(event.request, response.clone()).then(() => {
+//               return response;
+//             });
+//           });
+//         });
+//       })
+//     );
+//   }
+// });
 
-        return caches.open(RUNTIME).then(cache => {
-          return fetch(event.request).then(response => {
-            // Put a copy of the response in the runtime cache.
-            return cache.put(event.request, response.clone()).then(() => {
-              return response;
-            });
-          });
-        });
-      })
-    );
-  }
-});
 
+// from answer to the question on http://stackoverflow.com/questions/33590734/service-worker-and-transparent-cache-updates?rq=1
+ self.addEventListener('fetch', function(event) {
+     if (!event.request.url.startsWith(self.location.origin)) return;
+     if (event.request.url.indexOf("getAsyncData") !== -1) return;
 
+   event.respondWith(
+     caches.open(RUNTIME).then(function(cache) {
+       return cache.match(event.request).then(function(response) {
+         var fetchPromise = fetch(event.request).then(function(networkResponse) {
+           // if we got a response from the cache, update the cache
+           if (networkResponse) {
+             cache.put(event.request, networkResponse.clone());
+           }
+           return networkResponse;
+         });
+ 
+         // respond from the cache, or the network
+         return response || fetchPromise;
+       });
+     })
+   );
+ });
 
 //
 // messaging
@@ -120,7 +142,7 @@ self.addEventListener('message', function(event) {
         var url = event.data.url;
         sendMessageToAllClients("attempting delete cache");
         return cache.delete(url).then(function(success) {
-            sendMessageToAllClients({dataType:"add", url:url, status: success ? "success" : "fail"});
+            sendMessageToAllClients({dataType:"delete", url:url, status: success ? "success" : "fail"});
         });
       default:
         // This will be handled by the outer .catch().
@@ -139,7 +161,7 @@ self.addEventListener('message', function(event) {
   // the waitUntil() method for extending the lifetime of the event handler
   // until the promise is resolved.
   if ('waitUntil' in event) {
-    event.waitUntil(p);
+    // event.waitUntil(p);
   }
 
   // Without support for waitUntil(), there's a chance that if the promise chain
@@ -171,3 +193,12 @@ sendMessageToAllClients = function sendMessageToAllClients(message) {
         })
     });
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+
+// helper
+
