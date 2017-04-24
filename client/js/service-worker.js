@@ -80,7 +80,7 @@ self.addEventListener('activate', event => {
 // from answer to the question on http://stackoverflow.com/questions/33590734/service-worker-and-transparent-cache-updates?rq=1
  self.addEventListener('fetch', function(event) {
      if (!event.request.url.startsWith(self.location.origin)) return;
-     if (event.request.url.indexOf("getAsyncData") !== -1) return;
+     if (event.request.url.indexOf('/api') === -1) return;
 
    event.respondWith(
      caches.open(RUNTIME).then(function(cache) {
@@ -122,7 +122,8 @@ self.addEventListener('message', function(event) {
           // It's up to you how to structure the messages that you send back; this is just one example.
           sendMessageToAllClients({dataType:"keys", urls: urls? urls : "fail fetching"});
         });
-
+      break;
+      
       // This command adds a new request/response pair to the cache.
       case 'add':
         // If event.data.url isn't a valid URL, new Request() will throw a TypeError which will be handled
@@ -136,7 +137,8 @@ self.addEventListener('message', function(event) {
         }).then(function() {
           sendMessageToAllClients({dataType:"add", url:url, status: "success"});
         });
-
+        break;
+      
       // This command removes a request/response pair from the cache (assuming it exists).
       case 'delete':
         var url = event.data.url;
@@ -161,7 +163,7 @@ self.addEventListener('message', function(event) {
   // the waitUntil() method for extending the lifetime of the event handler
   // until the promise is resolved.
   if ('waitUntil' in event) {
-    // event.waitUntil(p);
+     event.waitUntil(p);
   }
 
   // Without support for waitUntil(), there's a chance that if the promise chain

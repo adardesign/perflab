@@ -1,4 +1,4 @@
-var cacheVersion = "3";
+var cacheVersion = "6"; // not used when taken from firebase.
 var express = require('express');
 var app = express();
 var fs = require('fs') 
@@ -25,19 +25,21 @@ app.use('/client', express.static(__dirname + '/../client/'));
 // service-worker
 app.use('/service-worker.js', express.static(__dirname+ '/../client/js/service-worker.js'));
 
-app.get(["/", "/:page"], (req, res) => {
+app.get(["/", "/:page", "/:catagory/:page"], (req, res) => {
   const url = 'https://perflab-163717.firebaseio.com/.json';
+  let pageType = req.params && req.params.catagory ? req.params.catagory : "top level";
     request(url, (error, response, body)=> {
       if (!error && response.statusCode === 200) {
-          responseJson = JSON.parse(body)
+          responseJson = JSON.parse(body);
+          cacheVersion = responseJson.cacheVersion  || cacheVersion;
           res.render('../views/index.ejs', {
-          pageType:"cache version via firebase:",
-          cacheVersion:responseJson.cacheVersion,
+          pageType:pageType,
+          cacheVersion:cacheVersion,
           currentUrl:req.url
         });
       } else {
           res.render('../views/index.ejs', {
-          pageType:"cache version via local:",
+          pageType:"Home",
           cacheVersion:cacheVersion,
           currentUrl:req.url
         });

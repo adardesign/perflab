@@ -25,3 +25,19 @@ https://perflab.herokuapp.com/
 
 step 1
 
+
+3 ways to know on the page that there is a "waiting" service worker - http://stackoverflow.com/questions/37573482/to-check-if-serviceworker-is-in-waiting-state
+- If it is `registriation.waiting`
+- if `registriation.installing` then track installing.. state change event if `installed` then it is a new sw
+- listen for event `updatefound`
+
+A good idea to keep control on faulty sw's is to update manually.
+````
+navigator.serviceWorker.register('/sw.js').then(reg => {
+  // sometime later…
+  reg.update();
+});
+````
+
+
+
