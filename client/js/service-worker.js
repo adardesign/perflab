@@ -14,6 +14,11 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
+self.importScripts('/client/js/idb-keyval-min.js', "/client/js/sw-utils.js");
+
+testIdb(11);
+
+
 const PRECACHE = 'precache-v1';
 const RUNTIME = 'runtime-v1';
 
@@ -81,6 +86,7 @@ self.addEventListener('activate', event => {
  self.addEventListener('fetch', function(event) {
      if (!event.request.url.startsWith(self.location.origin)) return;
      if (event.request.url.indexOf('/api') === -1) return;
+     if(!isRequestCacheable(event.request.url)){}
 
    event.respondWith(
      caches.open(RUNTIME).then(function(cache) {
@@ -104,7 +110,7 @@ self.addEventListener('activate', event => {
 // messaging
 self.addEventListener('message', function(event) {
   console.log('Handling message event:', event);
-  var p = caches.open(RUNTIME).then(function(cache) {
+  var openTheCachePromise = caches.open(RUNTIME).then(function(cache) {
     switch (event.data.command) {
       // This command returns a list of the URLs corresponding to the Request objects
       // that serve as keys for the current cache.
@@ -146,6 +152,17 @@ self.addEventListener('message', function(event) {
         return cache.delete(url).then(function(success) {
             sendMessageToAllClients({dataType:"delete", url:url, status: success ? "success" : "fail"});
         });
+
+        break;
+
+      case 'stale-storage':
+       console.log("stale-storage");
+
+      break;
+
+      case 'set-cache-version':
+       idbKeyval.set('resource-cache-version', event.data.resource);
+
       default:
         // This will be handled by the outer .catch().
         throw Error('Unknown command: ' + event.data.command);
@@ -163,7 +180,7 @@ self.addEventListener('message', function(event) {
   // the waitUntil() method for extending the lifetime of the event handler
   // until the promise is resolved.
   if ('waitUntil' in event) {
-     event.waitUntil(p);
+     event.waitUntil(openTheCachePromise);
   }
 
   // Without support for waitUntil(), there's a chance that if the promise chain
@@ -171,36 +188,4 @@ self.addEventListener('message', function(event) {
   // stopped before it's complete.
 });
 
-
-function sendMessageToSingleClient(client, msg){
-    return new Promise(function(resolve, reject){
-        var msg_chan = new MessageChannel();
-
-        msg_chan.port1.onmessage = function(event){
-            if(event.data.error){
-                reject(event.data.error);
-            }else{
-                resolve(event.data);
-            }
-        };
-
-        client.postMessage(msg, [msg_chan.port2]);
-    });
-}
-
-sendMessageToAllClients = function sendMessageToAllClients(message) {
-  clients.matchAll().then(clients => {
-        clients.forEach(client => {
-            sendMessageToSingleClient(client, message).then(m => console.log("SW Received Message: "+m));
-        })
-    });
-};
-
-
-
-////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-
-
-// helper
 
