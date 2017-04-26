@@ -21,6 +21,7 @@ app.use('/client', express.static(__dirname + '/../client/'));
 
 // service-worker
 app.use('/service-worker.js', express.static(__dirname+ '/../client/js/service-worker.js'));
+app.use('/manifest.json', express.static(__dirname+ '/../client/manifest.json'));
 
 app.get(["/", "/:page", "/:catagory/:page"], (req, res) => {
   const url = 'https://perflab-163717.firebaseio.com/.json';
