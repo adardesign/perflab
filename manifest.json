@@ -1,0 +1,23 @@
+{
+  "name": "perflab",
+  "short_name": "Performance Lab",
+  "description": "Web Performance Lab",
+  "icons": [
+    {
+      "src": "/",
+      "sizes": "/",
+      "type": "image/png"
+    },
+    {
+      "src": "/",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#eee",
+  "background_color": "#fff",
+  "display": "standalone",
+  "orientation": "natural",
+  "start_url": "/",
+  "gcm_sender_id": "103953800507"
+}
