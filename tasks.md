@@ -39,5 +39,13 @@ navigator.serviceWorker.register('/sw.js').then(reg => {
 });
 ````
 
-
+Question 
+Why do we need to manage the adding/removing of runtime cache in the sw while it is avaliable via js on page itself 
+````
+caches.open('cache-name').then( (cache) => {
+    cache.keys().then((keys) => {
+        console.log(keys)
+    });
+});
+````
 
