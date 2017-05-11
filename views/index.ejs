@@ -1,5 +1,6 @@
 <% include ../views/functions %> 
-
-<% include ../views/header %>
+<%if(!request.query.fragment){ %>
+	<% include ../views/header %>
+<%}%>
 <% include ../views/cacheHandler %>
 <% include ../views/footer %>

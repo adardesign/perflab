@@ -1,11 +1,13 @@
 	</div>
 		<footer>footer</footer>
-		<script>
+		<script class="scriptString">
 			pageInfo = {
-				cacheVersion:"<%=cacheVersion%>"
+				cacheVersion:"<%=cacheVersion%>",
+				pageType:"<%=pageType%>",
+				currentUrl:"<%=currentUrl%>"
 			}
 		</script>
-		<script defer src="/client/js/main.js"></script>
-		<script defer src="/client/js/sw-handler.js"></script>
+		<script class="scriptElement" defer src="/client/js/main.js"></script>
+		<script class="scriptElement" defer src="/client/js/sw-handler.js"></script>
 	</body>
 </html>
