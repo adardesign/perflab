@@ -9,10 +9,10 @@ loadPage = function loadPage() {
             document.querySelectorAll(".scriptString:not(.processed)").forEach(function(e, i) {
                 evaluateScript(e);
             });
-            Promise.all(document.querySelectorAll(".scriptElement").map(e => {
+            Promise.all([...document.querySelectorAll(".scriptElement")].map(e => {
                 return loadScript(e.src);
             })).then( () => {
-            	alert("loaded");
+            	
             })
         });
     });
