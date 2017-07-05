@@ -1,6 +1,4 @@
-body{
-	background: #eee;
-}
+
 
 header{
 	background: #333;
@@ -16,6 +14,35 @@ header{
 .pageContent{
 	height: calc(100vh - 170px);
 }
+
+.btn{
+	padding: 10px;	
+}
+.hide{
+	display: none;
+}
+
+.image-grid {
+  font-size: 0;
+  flex-flow: row wrap;
+  display: flex;
+  padding: .1vh;
+}
+.image-grid li {
+  flex: auto;
+  width: 350px;
+  height:350px;
+  margin: .1vh;
+}
+.image-grid li:hover {
+  opacity: 0.8;
+}
+.image-grid li img {
+  width: 100%;
+  height: auto;
+}
+
+
 footer{
 	background: #bbb;
 	padding:20px;
@@ -25,7 +52,4 @@ footer{
 	border-top: 2px solid;
 	text-align: center;
 	color:#aaa;
-}
-.btn{
-	padding: 10px;	
 }

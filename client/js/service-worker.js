@@ -66,6 +66,11 @@ self.addEventListener('activate', event => {
 
 // from answer to the question on http://stackoverflow.com/questions/33590734/service-worker-and-transparent-cache-updates?rq=1
 self.addEventListener('fetch', function(event) {
+    
+    if(!navigator.onLine){
+        console.log("offline");
+    }
+
     if (!event.request.url.startsWith(self.location.origin)) return;
     //  if (event.request.url.indexOf('/api') === -1) return;
 

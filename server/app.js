@@ -1,5 +1,5 @@
-var cacheVersion = "6"; // not used when taken from firebase.
-var express = require('express');
+const cacheVersion = "6"; // not used when taken from firebase.
+const express = require('express');
 var app = express();
 var fs = require('fs') 
 var request = require('request');
