@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
     if (req.query.fragment) {
         setTimeout((function() {
             res.sendFile("homepage.content.html", options);
-        }), 1500);
+        }), 900);
 
     } else {
         res.sendFile("homepage.html", options);
